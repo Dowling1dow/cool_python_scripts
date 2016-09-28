@@ -69,6 +69,9 @@ def get_file_format(extension):
 	elif extension == "powerpoint":
 		new_extension = "ppt"
 		return new_extension
+	elif extension == "document":
+		new_extension = "docx"
+		return new_extension
 	else:
 		new_extension = "pdf"
 		return new_extension
@@ -91,7 +94,7 @@ def scrape_moodle(moodle_class_links):
 			for a_tag in file_div:
 				img_tag = a_tag[0] # last few characters of img src link tell what format file is
 				span_tag = a_tag[1] # Name of the file
-				acceptable_formats = ['powerpoint', 'pdf', 'archive']		    
+				acceptable_formats = ['powerpoint', 'pdf', 'archive', 'document']		    
 				
 				for file_format in acceptable_formats:
 					if file_format in img_tag.get("src"):
