@@ -1,4 +1,4 @@
-import requests, getpass
+import requests
 from lxml import html
 from twilio.rest import TwilioRestClient
 
