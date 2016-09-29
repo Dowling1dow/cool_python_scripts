@@ -27,7 +27,7 @@ def send_text(late_trains):
 	account_sid = "{{ account_sid }}"
 	auth_token  = "{{ auth_token }}"
 	client = TwilioRestClient(account_sid, auth_token)
-	message = client.messages.create(
+	client.messages.create(
 		body=compose_text(late_trains),
 	    to="+{{ ENTER NUMBER }}",    # My phone number
 	    from_="+{{ ENTER TWILIO NUMBER }}") # Twilio number
