@@ -63,18 +63,12 @@ def download_file(download_url, filename, extension, module_name):
 
 
 def get_file_format(extension):
-	if extension == "archive":
-		new_extension = "zip"
-		return new_extension
-	elif extension == "powerpoint":
-		new_extension = "ppt"
-		return new_extension
-	elif extension == "document":
-		new_extension = "docx"
-		return new_extension
-	else:
-		new_extension = "pdf"
-		return new_extension
+	return {
+        "archive" : "zip",
+        "powerpoint" : "ppt",
+        "document" : "docx",
+        "spreadsheet" : "xslx",
+    }.get(extension, "pdf")
 
 def scrape_moodle(moodle_class_links):
 	module_dict = {}
@@ -94,15 +88,14 @@ def scrape_moodle(moodle_class_links):
 			for a_tag in file_div:
 				img_tag = a_tag[0] # last few characters of img src link tell what format file is
 				span_tag = a_tag[1] # Name of the file
-				acceptable_formats = ['powerpoint', 'pdf', 'archive', 'document']		    
+				acceptable_formats = ['powerpoint', 'pdf', 'archive', 'document', 'spreadsheet']		    
 				
 				for file_format in acceptable_formats:
 					if file_format in img_tag.get("src"):
 						# Check if file does not exist in folder
 						if not os.path.isfile(module+'/'+span_tag.text+'.'+get_file_format(file_format)):
-							print "Adding:\t" +span_tag.text+'.'+file_format
+							print "Adding:\t" +span_tag.text+'.'+get_file_format(file_format)
 							download_file(a_tag.get("href"), span_tag.text, file_format, module)
-
 
 # Get Moodle session
 S_moodle = get_moodle_session()
