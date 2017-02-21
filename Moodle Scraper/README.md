@@ -18,3 +18,5 @@ you've already got and download any files that you are missing.
 
 Also depending on your python environment, you may have to pip install some packages.
 The packages I use are: requests, lxml
+
+If you do not have pip installed, use this command: sudo easy_install pip
