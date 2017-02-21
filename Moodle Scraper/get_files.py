@@ -54,6 +54,7 @@ def download_file(download_url, filename, extension, module_name):
 	# Need to go to the url first to get the file url
 	result = S_moodle.get(download_url, stream=True)
 	r = S_moodle.get(download_url, stream=True)
+	filename = filename.replace("/", "")
 	with open(module_name+'/'+filename+'.'+get_file_format(extension), 'wb') as f:
 		for chunk in r.iter_content(chunk_size=1024): 
 			if chunk: # filter out keep-alive new chunks
