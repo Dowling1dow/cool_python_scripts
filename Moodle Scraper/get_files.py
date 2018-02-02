@@ -3,12 +3,11 @@ from lxml import html
 import sys
 import os.path
 
-print "Enter your student number:"
-student_num = raw_input()
+print("Enter your student number:")
+student_num = input()
 
-print "Enter your moodle password:"
-moodle_password = getpass.getpass()
-
+print("Enter your moodle password:")
+moodle_password = input()
 def get_moodle_session():
 	# Log into moodle
 	S_moodle = requests.session()
@@ -27,15 +26,15 @@ def get_moodle_session():
 def get_module_list():
 	# Creating a list of modules the user is registered to for the semester
 	if not os.path.isfile('module_list.txt'):
-		print "\nHow many modules are you doing this semester?"
-		num_of_modules = raw_input()
-		print "Enter your modules like so: <MODULE CODE> <MODULE TITLE>"
-		print "Hint: Its much better if you just copy & paste the entire title from csmoodle"
+		print("\nHow many modules are you doing this semester?")
+		num_of_modules = input()
+		print("Enter your modules like so: <MODULE CODE> <MODULE TITLE>")
+		print("Hint: Its much better if you just copy & paste the entire title from csmoodle")
 		c_list = []
-		for i in xrange(int(num_of_modules)):
-			c_list.append(str(raw_input()))
+		for i in range(int(num_of_modules)):
+			c_list.append(str(input()))
 
-		# Assuming input is in correct format
+    # Assuming input is in correct format
 		module_list = open('module_list.txt', 'w')
 		for module in c_list:
 			module_name = module[10:]
@@ -56,7 +55,7 @@ def download_file(download_url, filename, extension, module_name):
 	r = S_moodle.get(download_url, stream=True)
 	filename = filename.replace("/", "")
 	with open(module_name+'/'+filename+'.'+get_file_format(extension), 'wb') as f:
-		for chunk in r.iter_content(chunk_size=1024): 
+		for chunk in r.iter_content(chunk_size=1024):
 			if chunk: # filter out keep-alive new chunks
 				f.write(chunk)
 				#f.flush()
@@ -89,13 +88,13 @@ def scrape_moodle(moodle_class_links):
 			for a_tag in file_div:
 				img_tag = a_tag[0] # last few characters of img src link tell what format file is
 				span_tag = a_tag[1] # Name of the file
-				acceptable_formats = ['powerpoint', 'pdf', 'archive', 'document', 'spreadsheet']		    
-				
+				acceptable_formats = ['powerpoint', 'pdf', 'archive', 'document', 'spreadsheet']
+
 				for file_format in acceptable_formats:
 					if file_format in img_tag.get("src"):
 						# Check if file does not exist in folder
 						if not os.path.isfile(module+'/'+span_tag.text+'.'+get_file_format(file_format)):
-							print "Adding:\t" +span_tag.text+'.'+get_file_format(file_format)
+							print("Adding:\t" +span_tag.text+'.'+get_file_format(file_format))
 							download_file(a_tag.get("href"), span_tag.text, file_format, module)
 
 # Get Moodle session
@@ -111,5 +110,4 @@ tree = html.fromstring(moodle_result.content)
 moodle_class_links = tree.findall(".//h3[@class='coursename']/")
 scrape_moodle(moodle_class_links)
 
-print "Files up to date"
-
+print("Files up to date")
